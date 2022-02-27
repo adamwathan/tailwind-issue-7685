@@ -1,0 +1,108 @@
+<link rel="stylesheet" href="link/to/css" />
+
+<div
+  id="vertical-navigation"
+  class="w-60 fixed bottom-0 top-[60px] bg-dark-800"
+>
+  <div class="h-full bg-dark-600 bg-opacity-20">
+    <div class="mx-1 flex-grow flex flex-col">
+      <nav class="flex-1 px-2">
+        <!-- Content is loaded into here -->
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script>
+  let arrowIcon = `<svg class="text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6L14 10L6 14V6Z" fill="currentColor" /></svg>`;
+  let sharedClasses = [
+    "w-full",
+    "flex",
+    "items-center",
+    "pr-2",
+    "py-1",
+    "text-sm",
+    "text-left",
+    "font-normal",
+    "group-hover:text-gray-100",
+    "transition-colors",
+    "ease-in-out",
+    "duration-150",
+  ];
+  function generateMenu(data2) {
+    let data = [
+      {
+        title: "Dashboard",
+        icon: `<svg class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>`,
+        url: "#",
+        selected: true,
+      },
+      {
+        title: "Team",
+        icon: `<svg class="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>`,
+        url: "#",
+        submenu: [
+          {
+            title: "Overview",
+            url: "#",
+          },
+          {
+            title: "Members",
+            url: "#",
+          },
+          {
+            title: "Hello",
+            url: "#",
+          },
+        ],
+      },
+    ];
+
+    let navigation = document.querySelector("nav");
+    navigation.innerHTML = ""; // Clear the nav
+
+    for (let i = 0; i < data.length; i++) {
+      let entry = data[i];
+      let entryContainer = document.createElement("div");
+      navigation.appendChild(entryContainer);
+      entryContainer.classList.add("space-y-1");
+      if (!entry.submenu) {
+        let cl = document.createElement("a");
+        entryContainer.appendChild(cl);
+        cl.href = entry.url;
+        cl.classList.add("pl-2", ...sharedClasses);
+        cl.innerHTML = `${entry.icon} ${entry.title}`;
+        if (entry.selected) {
+          cl.classList.add("text-purple-500");
+        }
+      } else {
+        let btn = document.createElement("button");
+        entryContainer.appendChild(btn);
+        btn.classList.add("group", "pl-2", ...sharedClasses);
+        btn.innerHTML = `${entry.icon} <span class="flex-1">${entry.title}</span> ${arrowIcon}`;
+
+        let submenu = document.createElement("div");
+        entryContainer.appendChild(submenu);
+        submenu.classList.add("space-y-1");
+        for (let s = 0; s < entry.submenu.length; s++) {
+          let entryItem = entry.submenu[s];
+          let entryItemContainer = document.createElement("a");
+          submenu.appendChild(entryItemContainer);
+          entryItemContainer.href = entryItem.url;
+          entryItemContainer.classList.add("group", "pl-11", ...sharedClasses);
+          entryItemContainer.innerHTML = entryItem.title;
+        }
+      }
+    }
+  }
+  generateMenu();
+</script>
